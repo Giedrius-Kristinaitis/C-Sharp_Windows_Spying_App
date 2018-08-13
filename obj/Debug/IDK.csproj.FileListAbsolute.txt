@@ -1,0 +1,6 @@
+c:\users\gasis\documents\visual studio 2015\Projects\IDK\IDK\bin\Debug\IDK.exe.config
+c:\users\gasis\documents\visual studio 2015\Projects\IDK\IDK\bin\Debug\IDK.exe
+c:\users\gasis\documents\visual studio 2015\Projects\IDK\IDK\bin\Debug\IDK.pdb
+c:\users\gasis\documents\visual studio 2015\Projects\IDK\IDK\obj\Debug\IDK.csprojResolveAssemblyReference.cache
+c:\users\gasis\documents\visual studio 2015\Projects\IDK\IDK\obj\Debug\IDK.exe
+c:\users\gasis\documents\visual studio 2015\Projects\IDK\IDK\obj\Debug\IDK.pdb

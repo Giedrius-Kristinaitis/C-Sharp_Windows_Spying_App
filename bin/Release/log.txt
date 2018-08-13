@@ -1,0 +1,32 @@
+Process running.
+Message: The handle is invalid
+--------------------------------------------
+Source: System.Drawing
+--------------------------------------------
+Stack Trace:    at System.Drawing.Graphics.CopyFromScreen(Int32 sourceX, Int32 sourceY, Int32 destinationX, Int32 destinationY, Size blockRegionSize, CopyPixelOperation copyPixelOperation)
+   at System.Drawing.Graphics.CopyFromScreen(Int32 sourceX, Int32 sourceY, Int32 destinationX, Int32 destinationY, Size blockRegionSize)
+   at IDK.Program.Main(String[] args)
+--------------------------------------------
+String: System.ComponentModel.Win32Exception (0x80004005): The handle is invalid
+   at System.Drawing.Graphics.CopyFromScreen(Int32 sourceX, Int32 sourceY, Int32 destinationX, Int32 destinationY, Size blockRegionSize, CopyPixelOperation copyPixelOperation)
+   at System.Drawing.Graphics.CopyFromScreen(Int32 sourceX, Int32 sourceY, Int32 destinationX, Int32 destinationY, Size blockRegionSize)
+   at IDK.Program.Main(String[] args)
+--------------------------------------------
+********************************************
+Process running.
+Message: The handle is invalid
+--------------------------------------------
+Source: System.Drawing
+--------------------------------------------
+Stack Trace:    at System.Drawing.Graphics.CopyFromScreen(Int32 sourceX, Int32 sourceY, Int32 destinationX, Int32 destinationY, Size blockRegionSize, CopyPixelOperation copyPixelOperation)
+   at System.Drawing.Graphics.CopyFromScreen(Int32 sourceX, Int32 sourceY, Int32 destinationX, Int32 destinationY, Size blockRegionSize)
+   at IDK.Program.Main(String[] args)
+--------------------------------------------
+String: System.ComponentModel.Win32Exception (0x80004005): The handle is invalid
+   at System.Drawing.Graphics.CopyFromScreen(Int32 sourceX, Int32 sourceY, Int32 destinationX, Int32 destinationY, Size blockRegionSize, CopyPixelOperation copyPixelOperation)
+   at System.Drawing.Graphics.CopyFromScreen(Int32 sourceX, Int32 sourceY, Int32 destinationX, Int32 destinationY, Size blockRegionSize)
+   at IDK.Program.Main(String[] args)
+--------------------------------------------
+********************************************
+Process running.
+Process running.
