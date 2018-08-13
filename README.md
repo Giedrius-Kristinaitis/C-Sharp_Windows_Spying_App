@@ -1,4 +1,4 @@
-# C-Sharp_Windows_Spying_App
+# C-Sharp_Windows_User_Tracking_App
 
 # DISCLAIMER: I AM NOT RESPONSIBLE FOR ANY HARM SOMEONE MIGHT DO WITH THIS APPLICATION
 
