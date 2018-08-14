@@ -31,6 +31,7 @@
         /// </summary>
         public override void Update() {
             // TODO: sync settings and manage tasks
+            
         }
     }
 }
