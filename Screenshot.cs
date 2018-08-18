@@ -1,4 +1,5 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Drawing;
 
 namespace IDK {
 
@@ -7,9 +8,9 @@ namespace IDK {
     /// </summary>
     class Screenshot {
 
-        private Bitmap bitmap;      // screenshot pixel data 
-        private Graphics graphics;  // graphics to get the screenshot
-        private Size size;          // size of the screenshot
+        private Bitmap Bitmap;      // screenshot pixel data 
+        private Graphics Graphics;  // graphics to get the screenshot
+        private Size Size;          // size of the screenshot
 
         /// <summary>
         /// Class constructor. Initializes required variables
@@ -17,9 +18,9 @@ namespace IDK {
         /// <param name="width">width of the screenshot</param>
         /// <param name="height">height of the screenshot</param>
         public Screenshot(int width, int height) {
-            bitmap = new Bitmap(width, height);
-            size = new Size(width, height);
-            graphics = Graphics.FromImage(bitmap);
+            Bitmap = new Bitmap(width, height);
+            Size = new Size(width, height);
+            Graphics = Graphics.FromImage(Bitmap);
         }
 
         /// <summary>
@@ -27,8 +28,16 @@ namespace IDK {
         /// </summary>
         /// <returns>reference to the Bitmap with pixel data</returns>
         public Bitmap Take() {
-            graphics.CopyFromScreen(0, 0, 0, 0, size);
-            return bitmap;
+            Graphics.CopyFromScreen(0, 0, 0, 0, Size);
+            return Bitmap;
+        }
+
+        /// <summary>
+        /// Disposes of the screenshot's bitmap
+        /// </summary>
+        public void Dispose() {
+            Bitmap.Dispose();
+            Graphics.Dispose();
         }
     }
 }

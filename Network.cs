@@ -14,9 +14,9 @@ namespace IDK {
         /// </summary>
         /// <param name="uri">URI of the resource</param>
         /// <param name="method">http method to be used</param>
-        /// <param name="headers">http headers for the request</param>
-        /// <returns></returns>
-        public static Stream MakeHttpRequest(string uri, string method, Dictionary<HttpRequestHeader, string> headers) {
+        /// <param name="headers">http headers for the request, can be null</param>
+        /// <returns>WebResponse</returns>
+        public static WebResponse MakeHttpRequest(string uri, string method, Dictionary<HttpRequestHeader, string> headers) {
             HttpWebRequest request = (HttpWebRequest) WebRequest.Create(uri);
             request.Method = method;
             request.Timeout = 60000;
@@ -26,10 +26,8 @@ namespace IDK {
                     request.Headers.Add(header.Key, header.Value);
                 }
             }
-
-            WebResponse response = request.GetResponse();
             
-            return response.GetResponseStream();
+            return request.GetResponse();
         }
 
         /// <summary>
@@ -38,7 +36,20 @@ namespace IDK {
         /// <param name="uri">URI of the remote resource to which the file will be uploaded</param>
         /// <param name="file">file path relative to the directory of the program's executable file</param>
         public static void UploadFile(string uri, string file) {
-            new WebClient().UploadFile(uri, new FileInfo(file).FullName);
+            using (WebClient client = new WebClient()) {
+                client.UploadFile(uri, new FileInfo(file).FullName);
+            }
+        }
+
+        /// <summary>
+        /// Downloads a file from the specified URI
+        /// </summary>
+        /// <param name="uri">URI of the file to download</param>
+        /// <param name="file">name of the local file to save to</param>
+        public static void DownloadFile(string uri, string file) {
+            using (WebClient client = new WebClient()) {
+                client.DownloadFile(uri, file);
+            }
         }
     }
 }

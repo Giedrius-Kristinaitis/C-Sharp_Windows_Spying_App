@@ -63,6 +63,9 @@ namespace IDK {
             // delegate to process key events
             private delegate IntPtr LowLevelKeyboardProc(int nCode, IntPtr wParam, IntPtr lParam);
 
+            // reference to the low level hook callback so that gc doesn't collect the callback delegate
+            private LowLevelKeyboardProc LowLevelHookCallback;
+
             // gets called when key down events occur
             private Callback M_Callback;
 
@@ -78,7 +81,8 @@ namespace IDK {
             /// Sets (and unsets) hook and starts listening to key events
             /// </summary>
             public void Run() {
-                HookID = SetHook(HookCallback);
+                LowLevelHookCallback = HookCallback;
+                HookID = SetHook(LowLevelHookCallback);
                 Application.Run();
                 UnhookWindowsHookEx(HookID);
             }

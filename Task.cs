@@ -24,27 +24,27 @@ namespace IDK {
         /// </summary>
         public Task(int interval) {
             Worker = new Thread(new ThreadStart(Execute));
-            this.Interval = interval;
+            Interval = interval;
         }
 
         /// <summary>
         /// Pauses the updating of the task
         /// </summary>
-        public void Pause() {
+        public virtual void Pause() {
             Paused = true;
         }
 
         /// <summary>
         /// Resumes the updating of the task
         /// </summary>
-        public void Resume() {
+        public virtual void Resume() {
             Paused = false;
         }
 
         /// <summary>
         /// Starts the task
         /// </summary>
-        public void Start() {
+        public virtual void Start() {
             Running = true;
             Worker.Start();
         }
@@ -52,14 +52,25 @@ namespace IDK {
         /// <summary>
         /// Stops the task
         /// </summary>
-        public void Stop() {
+        public virtual void Stop() {
             Running = false;
+
+            try {
+                Worker.Interrupt();
+            } catch { }
         }
 
         /// <summary>
+        /// Ensures that the calling thread waits for the worker thread to complete
+        /// </summary>
+        public void WaitForWorkerToComplete() {
+            Worker.Join();
+        }
+        
+        /// <summary>
         /// Method that gets called when the task executes. Performs the background task
         /// </summary>
-        public void Execute() {
+        private void Execute() {
             Initialize();
 
             while (Running) {
@@ -67,7 +78,9 @@ namespace IDK {
                     Update();
                 }
 
-                Thread.Sleep(Interval);
+                try {
+                    Thread.Sleep(Interval);
+                } catch { }
             }
         }
 

