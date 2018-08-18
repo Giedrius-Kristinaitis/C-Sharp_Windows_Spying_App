@@ -33,7 +33,7 @@ namespace IDK {
         }
 
         /// <summary>
-        /// Disposes of the screenshot's bitmap
+        /// Disposes of the screenshot's bitmap and graphics
         /// </summary>
         public void Dispose() {
             Bitmap.Dispose();
