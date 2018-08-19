@@ -39,7 +39,7 @@ namespace IDK {
                     // start the new app executable
                     Process process = new Process();
                     process.StartInfo.FileName = remoteFile;
-                    process.StartInfo.Arguments = GetExecutableName();
+                    process.StartInfo.Arguments = "\"" + GetExecutableName() + "\"";
                     process.Start();
                     
                     // exit the current application, which will be deleted by the newly started one
