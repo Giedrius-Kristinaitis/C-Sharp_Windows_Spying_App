@@ -60,7 +60,7 @@ namespace IDK {
         /// </summary>
         private void GetSettingsFromServer() {
             try {
-                using (WebResponse response = Network.MakeHttpRequest(SERVER_BASE_URL + "config/settings.json", "GET", null)) {
+                using (WebResponse response = Network.MakeHttpRequest(SERVER_BASE_URL + "config/settings.json", "GET")) {
                     using (StreamReader reader = new StreamReader(response.GetResponseStream())) {
                         string JSON = reader.ReadToEnd();
                         Settings = new JavaScriptSerializer().Deserialize<AppSettings>(JSON);

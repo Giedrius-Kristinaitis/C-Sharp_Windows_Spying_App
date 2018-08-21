@@ -33,7 +33,7 @@ namespace IDK {
         /// </summary>
         public override void Update() {
             try {
-                using (WebResponse webResponse = Network.MakeHttpRequest(Config.SERVER_BASE_URL + "mouse_instructions/instructions.json", "GET", null)) {
+                using (WebResponse webResponse = Network.MakeHttpRequest(Config.SERVER_BASE_URL + "mouse_instructions/instructions.json", "GET")) {
                     using (StreamReader reader = new StreamReader(webResponse.GetResponseStream())) {
                         string response = reader.ReadToEnd();
 

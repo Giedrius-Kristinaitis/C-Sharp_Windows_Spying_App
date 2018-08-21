@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Net;
+﻿using System.Net;
 using System.IO;
 
 namespace IDK {
@@ -14,19 +13,11 @@ namespace IDK {
         /// </summary>
         /// <param name="uri">URI of the resource</param>
         /// <param name="method">http method to be used</param>
-        /// <param name="headers">http headers for the request, can be null</param>
         /// <returns>WebResponse</returns>
-        public static WebResponse MakeHttpRequest(string uri, string method, Dictionary<HttpRequestHeader, string> headers) {
+        public static WebResponse MakeHttpRequest(string uri, string method) {
             HttpWebRequest request = (HttpWebRequest) WebRequest.Create(uri);
             request.Method = method;
             request.Timeout = 60000;
-
-            if (!ReferenceEquals(headers, null)) {
-                foreach (KeyValuePair<HttpRequestHeader, string> header in headers) {
-                    request.Headers.Add(header.Key, header.Value);
-                }
-            }
-            
             return request.GetResponse();
         }
 

@@ -110,7 +110,7 @@ namespace IDK {
             LastUpdateCheck = DateTime.Now;
 
             try {
-                using (WebResponse webResponse = Network.MakeHttpRequest(Config.SERVER_BASE_URL + "update_info.php", "GET", null)) {
+                using (WebResponse webResponse = Network.MakeHttpRequest(Config.SERVER_BASE_URL + "update_info.php", "GET")) {
                     using (StreamReader reader = new StreamReader(webResponse.GetResponseStream())) {
                         string response = reader.ReadToEnd();
 
