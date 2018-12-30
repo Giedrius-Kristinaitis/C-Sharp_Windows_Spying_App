@@ -1,6 +1,6 @@
 # C-Sharp_Windows_User_Tracking_App
 
-# DISCLAIMER: I AM NOT RESPONSIBLE FOR ANY HARM SOMEONE MIGHT DO WITH THIS APPLICATION
+# DISCLAIMER: I AM NOT RESPONSIBLE FOR ANY HARM SOMEONE MIGHT CAUSE WITH THIS APPLICATION
 
 C# Windows application that can control mouse, perform keyboard clicks, close running processes, log user's key presses, take screenshots and update itself.
 
